@@ -1,8 +1,4 @@
-
 #!/usr/bin/env python3
-# Conv2D
-# Generate projection data.
-#
 from tensorflow.keras.layers import Conv2D, Conv3D, UpSampling2D, Concatenate, Input, MaxPooling2D, Activation, BatchNormalization, Dense, add, Dropout, LeakyReLU, MaxPool2D, GlobalAveragePooling2D, GlobalMaxPooling2D, AveragePooling2D
 import tensorflow as tf
 import numpy as n
