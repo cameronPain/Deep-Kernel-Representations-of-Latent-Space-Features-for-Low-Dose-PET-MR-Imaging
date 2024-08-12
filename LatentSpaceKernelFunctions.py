@@ -10,42 +10,24 @@ import numpy as n
 #
 #
 #
-#    Separable MR and PET method for robust deep learning.
-#         author: Cameron Dennis Pain: 20230227
+#    Latent-space kernel functions for low-dose PET MR imaging robust to varying dose reduction
+#         author: Cameron Dennis Pain: 20240802
 #    affiliation: Monash Biomedical Imaging, Monash University
 #          email: cameron.pain@monash.edu.au
 #
+#   This method represents latent space feature maps using kernel functions derived from MR
+#   to provide explicit regularisation for improved performance across a varying range of 
+#   dose reduction factors.
 #
-#   Method presents a novel architecture which constrains the spatial information
-#   extracted from the PET image and rather, relies on the MR image. Information
-#   from PET is constrained to contrast information. We propose that MR contains
-#   sufficient spatial information, and that this constraint sacrifices very little
-#   in-distribution performance in return for drastically superior out-of-distribution
-#   performance.
 #
-#   Changes since v0: Add a constraint to the softmax output of the basis function;
-#      C(p) = p*(p-1); This encourages the output to take either 1 or 0 values and
-#      discourages spreading the pixel value over all the outputs.
-#
-#   Changes since v1: Patch the basis derived PET data. Instead of taking an average 
-#      over the whole image, take the average over patches. This will give us regional
-#      PET uptake information restricted by the size of the patches. If patch size goes
-#      to (1x1) we can take all the PET information.
-#
-#   Changes since v3: Concatenate PET data into the basis generator. This provides 
-#      spatial information regarding PET high uptake focii to the basis, but it shouldn't
-#     `be recoverable with the basis average and projection.
-#
-#   Changes since v8: Change from max pool to average pooling in the PET encoder to make
-#   it less sensitive to noise.
-#
-#   Changes since v10: We have a lower dimensional latent vector. Pool it one more time so
-#   it has less spatial information and is less affected by noise.
+#   This file we define all our trainable layers/model classes.
 #   
-#   ver28: It's  not actually using the deep layers. This is a disaster. I will stop feeding
-#   mixedN to the deeper layers. The basis generator uses a softmax so it should not overfit
-#   to the mR contrast.
+#    DeepKernelNetwork() takes low-dose PET and MR inputs. 
 #
+#    At each layer of the DeepKernelNetwork, we calculate kernel functions and code vectors.
+#
+#    We calculate kernel features and pass these to a decoder branch to recover
+#    the target image.
 #
 ########################################################################################
 
