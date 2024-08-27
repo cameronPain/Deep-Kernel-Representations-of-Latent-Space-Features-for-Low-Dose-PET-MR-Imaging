@@ -13,28 +13,6 @@ import sys;
 import math;
 from LatentSpaceKernelFunctions  import DeepKernelNetwork; 
 
-
-def load_fd_data(FD_data_directory, nof_data = None):
-    if FD_data_directory[-1] !='/':
-        FD_data_directory+='/'
-    else:
-        pass
-    label_dir  = FD_data_directory;
-    file_names = os.popen('ls ' + label_dir).read().split('\n')[:-1];
-    print('Nof files: ', len(file_names));
-    full_label = []
-    if nof_data == None:
-        file_range = len(file_names);
-    else:
-        file_range = nof_data;
-        
-    #idx = [0];
-    for i in range(file_range):
-        file = file_names[i];
-        l = n.load(label_dir + file);
-        full_label.append(l)
-    return n.array(full_label)
-
 def load_data(training_data_directory, nof_data = None, slice_per_input = 3):
     pad = slice_per_input//2;
     if training_data_directory[-1] !='/':
