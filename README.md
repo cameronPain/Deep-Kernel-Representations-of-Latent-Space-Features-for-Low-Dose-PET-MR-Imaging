@@ -41,4 +41,7 @@ This can be chosen based on hardware and time limitations.
 We have provided a collection of pre-trained weights trained at varying values of patch-size, stride factor and information constraint for testing.
 We have provided an example test case also.
 
+Data Link: https://monashuni-my.sharepoint.com/:u:/g/personal/cameron_pain_monash_edu/Ed3CeYoCAfZBtzx_w8crLGwB6Yu-B5lopHCizJymBXyX1w?e=pUVIuC
+Weights Link: https://monashuni-my.sharepoint.com/:u:/g/personal/cameron_pain_monash_edu/EclbWBse1lNCnky2Vvc3r5MBfqBUMExg9IWI0UGKamWWJQ?e=CgXG1f
+
 
