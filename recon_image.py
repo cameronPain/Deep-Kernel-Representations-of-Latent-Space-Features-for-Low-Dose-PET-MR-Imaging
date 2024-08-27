@@ -14,55 +14,6 @@ import math;
 from LatentSpaceKernelFunctions  import DeepKernelNetwork; 
 
 
-#
-#
-#
-#
-#
-#
-"""
-Trainable PET image reconstruction network.
-"""
-#
-#
-#
-#
-#
-
-def get_image_metrics(data_set, target_data, show_images = False):
-        psnr_out, ssim_out, rmse_out = [],[],[]
-        for i in range(len(data_set)):
-            dat = data_set[i];
-            tar = target_data[i];
-            
-            ssim  = SSIM(tar, dat, data_range = tar.max() - tar.min() );
-            psnr  = PSNR(tar, dat, data_range = tar.max() - tar.min() );
-            nrmse = nRMSE(tar, dat, normalization='euclidean');
-            
-            
-            #
-            if math.isnan(psnr) :
-                pass
-            else:
-                psnr_out.append(psnr);
-            
-            if math.isnan(ssim) :
-                pass
-            else:
-                ssim_out.append(ssim);
-            
-            if math.isnan(nrmse) :
-                pass
-            else:
-                rmse_out.append(nrmse);
-        psnr_out = n.array(psnr_out);
-        ssim_out = n.array(ssim_out);
-        rmse_out = n.array(rmse_out);
-        return psnr_out, ssim_out, rmse_out;
-
-
-
-
 def load_fd_data(FD_data_directory, nof_data = None):
     if FD_data_directory[-1] !='/':
         FD_data_directory+='/'
@@ -85,9 +36,7 @@ def load_fd_data(FD_data_directory, nof_data = None):
     return n.array(full_label)
 
 def load_data(training_data_directory, nof_data = None, slice_per_input = 3):
-
     pad = slice_per_input//2;
-
     if training_data_directory[-1] !='/':
         training_data_directory+='/'
     else:
@@ -121,39 +70,15 @@ def load_data(training_data_directory, nof_data = None, slice_per_input = 3):
         dat = n.array(dat);
         lab = n.array(lab);
         b, s, h, w, c = dat.shape;
-        
         dat = dat.transpose((0,2,3,4,1))
         dat = dat.reshape((b,h,w,c*s));
-        
         print('Dat: ', dat.shape);
         print('Lab: ', lab.shape);
         full_data.append(dat);
         full_label.append(lab);
     return n.array(full_data), n.array(full_label)
 
-
-def get_checkpoints(checkpoint_directory):
-    files = os.popen('ls ' + checkpoint_directory).read().split('\n')[:-1];
-    try: files.remove('checkpoint');
-    except: pass;
-    checkpoints = [];
-    epochs      = [];
-    for file in files:
-        file_name = file.split('.')[0];
-        epoch     = file_name.split('-')[1];
-        if checkpoint_directory + file_name in checkpoints:
-            pass;
-        else:
-            checkpoints.append( checkpoint_directory + file_name);
-            epochs.append((int(epoch)-1)*5);
-    epochs, checkpoints = zip(*sorted(zip(epochs, checkpoints)))
-    print('(Training epochs, checkpoint name)');
-    for i in range(len(epochs)):
-        print(epochs[i], checkpoints[i]);
-    return checkpoints, epochs
-
-def main(data_directory, checkpoint, kernel_patch_size, kernel_stride_size, slice_per_input, save_file):
-    
+def main(data_directory, checkpoint, kernel_patch_size, kernel_stride_size, slice_per_input, save_file):    
     gpus       = tf.config.list_physical_devices('GPU');
     if gpus:
        try:
